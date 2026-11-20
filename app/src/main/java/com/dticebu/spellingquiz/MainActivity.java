@@ -20,7 +20,9 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setStatusBarColor(Color.parseColor("#F2A814"));
+        getWindow().setStatusBarColor(Color.parseColor("#FFF8EC"));
+        getWindow().getDecorView().setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        getWindow().setNavigationBarColor(Color.parseColor("#FFF8EC"));
 
         tts = new TextToSpeech(this, status -> {
             if (status == TextToSpeech.SUCCESS) {
@@ -33,7 +35,8 @@ public class MainActivity extends Activity {
         });
 
         webView = new WebView(this);
-        webView.setBackgroundColor(Color.parseColor("#FBD35A"));
+        webView.setBackgroundColor(Color.parseColor("#FFF8EC"));
+        webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER);
         WebSettings s = webView.getSettings();
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
