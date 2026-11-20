@@ -99,6 +99,10 @@ h1,h2,h3{font-family:"Baloo 2",Nunito,sans-serif;margin:0;line-height:1.1}
 .answer{width:100%;font:800 26px/1.2 Nunito,system-ui,Roboto,sans-serif;letter-spacing:.06em;text-align:center;color:var(--ink);background:#FFFDF8;border:2.5px solid var(--line);border-radius:18px;padding:16px 12px;caret-color:var(--honey-d)}
 .answer:focus{outline:none;border-color:var(--honey);box-shadow:0 0 0 4px rgba(245,166,35,.18)}
 .answer::placeholder{color:#C9BCA8;letter-spacing:.02em;font-weight:700;font-size:18px}
+.hintbox{width:100%;margin-top:14px;background:#EEF4FF;border:2px solid #D6E3FF;color:#1F3A7A;border-radius:16px;padding:12px 14px;font:700 15.5px/1.45 Nunito,system-ui,Roboto,sans-serif;text-align:left}
+.hintbox b{display:block;font:900 12.5px Nunito,system-ui,Roboto,sans-serif;color:#3D7BF7;margin-bottom:2px}
+.chip.used{background:#EEF4FF;border-color:#D6E3FF;color:#3D7BF7}
+.tag.hint{background:#EEF4FF;color:#3D7BF7}
 .flash{min-height:22px;font:800 14px Nunito,system-ui,Roboto,sans-serif;color:var(--ink2);text-align:center;margin-top:10px}
 .bar{position:sticky;bottom:0;margin:auto -18px calc(-24px - var(--safe-b));padding:14px 18px calc(18px + var(--safe-b));background:linear-gradient(transparent,var(--bg) 22%);display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px}
 .bar .skip{width:auto;padding:0 20px}
@@ -191,7 +195,9 @@ h1,h2,h3{font-family:"Baloo 2",Nunito,sans-serif;margin:0;line-height:1.1}
     <div class="tools">
       <button type="button" class="chip" id="slow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Slower</button>
       <button type="button" class="chip" id="letters"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h10M4 17h6"/></svg>Letter count</button>
+      <button type="button" class="chip" id="meanBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7"/></svg>Meaning</button>
     </div>
+    <div class="hintbox" id="hintbox" hidden></div>
     <div class="dots" id="dots" aria-hidden="true"></div>
     <div class="field"><label for="ans" class="muted" style="position:absolute;left:-9999px">Type the spelling</label>
       <input id="ans" class="answer" type="text" placeholder="Type here" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done"></div>
@@ -253,7 +259,7 @@ const hasWebSpeech='speechSynthesis' in window;
 const canSpeak=!!window.AndroidTTS||hasWebSpeech;
 if(!canSpeak)$('voiceNote').textContent="Your device can’t read words aloud, so each word will flash on screen briefly.";
 
-let level='easy',queue=[],i=0,score=0,results=[],answered=false,lastList=[],lastLevel='easy';
+let level='easy',queue=[],i=0,score=0,results=[],answered=false,lastList=[],lastLevel='easy',hintUsed=false;
 
 /* ---------- Home ---------- */
 function renderHome(){
@@ -310,7 +316,7 @@ function next(){
  const segs=$('segs').children;if(segs[i])segs[i].classList.add('now');
  $('count').textContent=`${i+1} / ${queue.length}`;
  $('ans').value='';$('ans').disabled=false;$('flash').textContent='';$('dots').innerHTML='';
- $('check').disabled=true;$('ans').focus();
+ $('check').disabled=true;$('hintbox').hidden=true;$('meanBtn').classList.remove('used');hintUsed=false;$('ans').focus();
  setTimeout(()=>speak(queue[i][0]),250);
 }
 $('ans').addEventListener('input',()=>{$('check').disabled=!$('ans').value.trim();updateDots()});
@@ -318,13 +324,17 @@ function updateDots(){const d=$('dots');if(!d.dataset.n)return;const n=+d.datase
  d.innerHTML=Array.from({length:n},(_,k)=>`<i class="${k<t?'on':''}"></i>`).join('')}
 $('letters').addEventListener('click',()=>{const n=queue[i][0].replace(/\s/g,'').length;$('dots').dataset.n=n;updateDots();$('flash').textContent=`${n} letters`});
 $('hear').addEventListener('click',()=>speak(queue[i][0]));
+function maskWord(m,w){const re=new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi');return m.replace(re,'_'.repeat(Math.min(w.length,8)))}
+$('meanBtn').addEventListener('click',()=>{if(answered)return;const [w,m]=queue[i];const box=$('hintbox');
+ box.innerHTML='<b>MEANING</b>'+(m?esc(maskWord(m,w)):'No meaning was added for this word.');box.hidden=false;
+ hintUsed=true;$('meanBtn').classList.add('used');});
 $('slow').addEventListener('click',()=>speak(queue[i][0],0.5));
 $('form').addEventListener('submit',e=>{e.preventDefault();if(!answered&&$('ans').value.trim())judge($('ans').value)});
 $('check').addEventListener('click',()=>{if(!answered&&$('ans').value.trim())judge($('ans').value)});
 $('skip').addEventListener('click',()=>{if(!answered)judge('')});
 function judge(given){
  const [w,m]=queue[i];const ok=norm(given)===norm(w);
- if(ok)score++;results.push({w,m,given,ok});answered=true;$('ans').disabled=true;delete $('dots').dataset.n;
+ if(ok)score++;results.push({w,m,given,ok,hint:hintUsed});answered=true;$('ans').disabled=true;delete $('dots').dataset.n;
  const seg=$('segs').children[i];seg.classList.remove('now');seg.classList.add(ok?'ok':'bad');
  const sh=$('sheet');sh.className='sheet show '+(ok?'ok':'bad');
  $('sheetTitle').innerHTML=ok?'<svg width="28" height="28" viewBox="0 0 24 24" fill="#22A05B"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Correct!':
@@ -351,7 +361,7 @@ function finish(){
  $('msg').textContent=pct===1?'Perfect score!':pct>=.8?'Excellent spelling!':pct>=.5?'Good job!':'Keep practicing!';
  $('rOk').textContent=score;$('rBad').textContent=n-score;$('rPct').textContent=Math.round(pct*100)+'%';
  $('rows').innerHTML=results.map((r,k)=>`<div class="wcard ${r.ok?'':'bad'}">
-  <div class="wtop"><h3>${esc(r.w)}</h3><span class="tag ${r.ok?'ok':'bad'}">${r.ok?'Correct':r.given?'Wrong':'Skipped'}</span>
+  <div class="wtop"><h3>${esc(r.w)}</h3>${r.hint?'<span class="tag hint">Hint</span>':''}<span class="tag ${r.ok?'ok':'bad'}">${r.ok?'Correct':r.given?'Wrong':'Skipped'}</span>
   <button class="say" data-k="${k}" aria-label="Hear ${esc(r.w)}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 8.5a5 5 0 0 1 0 7"/></svg></button></div>
   ${r.ok?'':`<div class="yours">You wrote: ${r.given?`<s>${esc(r.given)}</s>`:'<em>nothing</em>'}</div>`}
   <div class="mean"><b>Meaning:</b> ${r.m?esc(r.m):'<em>No meaning added</em>'}</div></div>`).join('');
