@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,8 +20,18 @@ jobs:
         with:
           gradle-version: '8.7'
       - name: Build the APK
-        run: gradle assembleDebug
+        run: |
+          gradle assembleDebug
+          cp app/build/outputs/apk/debug/app-debug.apk SpellingBeeQuiz.apk
       - uses: actions/upload-artifact@v4
         with:
           name: SpellingBeeQuiz-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: SpellingBeeQuiz.apk
+      - name: Publish download link
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: Spelling Bee Quiz (latest)
+          body: Tap **SpellingBeeQuiz.apk** below to download, then open it to install.
+          files: SpellingBeeQuiz.apk
+          make_latest: true
