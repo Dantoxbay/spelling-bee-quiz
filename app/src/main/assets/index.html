@@ -92,6 +92,42 @@ h1,h2,h3{font-family:"Baloo 2",Nunito,sans-serif;margin:0;line-height:1.1}
 .emptybox{text-align:center;padding:40px 20px;color:var(--ink2);font-weight:700}
 .notice{margin-top:14px;background:#FFF0EF;color:#8C3B3B;border-radius:14px;padding:10px 14px;font:800 14px Nunito,system-ui,Roboto,sans-serif;text-align:center}
 .linkbtn{border:0;background:none;color:var(--ink3);font:800 14px Nunito,system-ui,Roboto,sans-serif;padding:10px;min-height:44px;text-decoration:underline}
+/* ---------- Crossword ---------- */
+.cwcard{background:linear-gradient(150deg,#EAF1FF,#DCE7FF);border:2px solid #CCDBFF;border-radius:var(--r);padding:16px;box-shadow:var(--sh)}
+.cwcard .row1{display:flex;gap:14px;align-items:center}
+.cwicon{width:52px;height:52px;border-radius:14px;background:#fff;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:7px;flex:none;box-shadow:0 2px 6px rgba(61,123,247,.2)}
+.cwicon i{border-radius:3px;background:#3D7BF7}.cwicon i.o{background:transparent}
+.cwcard h3{font-size:19px}.cwcard .sub{font:700 13.5px Nunito,system-ui,Roboto,sans-serif;color:#2C4A8A}
+.seg3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;background:#fff;border-radius:14px;padding:5px;margin-top:14px}
+.seg3 button{border:0;background:none;border-radius:10px;min-height:40px;font:800 14.5px Nunito,system-ui,Roboto,sans-serif;color:var(--ink2)}
+.seg3 button[aria-pressed=true]{background:#3D7BF7;color:#fff}
+.cwcard .btn{margin-top:12px;background:#3D7BF7;color:#fff;box-shadow:0 4px 0 #2A5BC4}
+#cross.screen{padding-bottom:calc(8px + var(--safe-b))}
+.cwhead{display:flex;justify-content:space-between;align-items:center;margin:14px 2px 10px}
+.cwhead h2{font-size:22px}.cwhead .count{font:800 14px Nunito,system-ui,Roboto,sans-serif;color:var(--ink3)}
+.gridwrap{display:flex;justify-content:center;margin-bottom:12px}
+.cgrid{display:grid;gap:2px;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.cell{position:relative;background:#fff;border-radius:5px;box-shadow:0 0 0 1.5px #D9CBB4;display:grid;place-items:center;font:900 calc(var(--cs)*.56) Nunito,system-ui,Roboto,sans-serif;color:var(--ink);text-transform:uppercase;cursor:pointer}
+.cell .n{position:absolute;top:1px;left:3px;font:800 calc(var(--cs)*.26) Nunito,system-ui,Roboto,sans-serif;color:var(--ink3);line-height:1}
+.cell.inword{background:#FFF1D0}
+.cell.sel{background:#F5A623;box-shadow:0 0 0 2px #D98A00;color:#2A1A00}.cell.sel .n{color:#5A3A00}
+.cell.wrong{color:var(--bad);background:#FDE1E1}.cell.sel.wrong{background:#F5A623}
+.cell.rev{color:#3D7BF7}
+.cell.done{background:#DDF3E5;box-shadow:0 0 0 1.5px #9ED7B4}
+.cell.done.sel{background:#F5A623}
+.empty{background:transparent}
+.cluebar{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:8px;align-items:center;background:#3D7BF7;color:#fff;border-radius:16px;padding:6px;min-height:64px}
+.cluebar .arrow{width:44px;height:44px;border:0;border-radius:12px;background:rgba(255,255,255,.18);color:#fff;display:grid;place-items:center}
+.cluetxt{font:700 15px/1.3 Nunito,system-ui,Roboto,sans-serif;padding:2px 2px}
+.cluetxt b{display:block;font:900 12px Nunito,system-ui,Roboto,sans-serif;opacity:.85;letter-spacing:.02em}
+.cwtools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:10px 0}
+.cwtools::-webkit-scrollbar{display:none}
+.cwtools .chip{justify-content:center;min-height:42px;padding:6px 4px;font-size:13px;gap:4px;white-space:nowrap}
+.kb{display:grid;gap:6px;margin-top:auto}
+.kbrow{display:flex;gap:5px;justify-content:center}
+.key{flex:1;max-width:44px;height:50px;border:0;border-radius:10px;background:#fff;box-shadow:0 2px 0 #DCCFBB;font:900 18px Nunito,system-ui,Roboto,sans-serif;color:var(--ink);padding:0}
+.key:active{background:#FFE7B3;transform:translateY(1px)}
+.key.wide{max-width:66px;flex:1.5;display:grid;place-items:center}
 /* ---------- Game ---------- */
 .topbar{display:flex;align-items:center;gap:12px}
 .icon{width:44px;height:44px;border-radius:14px;border:0;background:var(--card);box-shadow:var(--sh);display:grid;place-items:center;flex:none}
@@ -190,6 +226,14 @@ h1,h2,h3{font-family:"Baloo 2",Nunito,sans-serif;margin:0;line-height:1.1}
   <div class="sec"><h2>Choose a level</h2><span class="muted" style="font-size:13px;font-weight:800">10 words per game</span></div>
   <div class="levels" id="levels"></div>
 
+  <div class="sec"><h2>Games</h2></div>
+  <div class="cwcard">
+    <div class="row1"><span class="cwicon" aria-hidden="true"><i></i><i></i><i></i><i class="o"></i><i></i><i class="o"></i><i></i><i></i><i></i></span>
+    <span><h3>Crossword puzzle</h3><span class="sub">Meanings are the clues. A new puzzle every time.</span></span></div>
+    <div class="seg3" id="cwLv"><button data-l="easy" aria-pressed="true">Easy</button><button data-l="medium" aria-pressed="false">Medium</button><button data-l="hard" aria-pressed="false">Hard</button></div>
+    <button class="btn" id="cwPlay">Play crossword</button>
+  </div>
+
   <div class="sec"><h2>Bank of Wrong Words</h2></div>
   <div class="mbank" id="mbank"></div>
 
@@ -242,6 +286,30 @@ h1,h2,h3{font-family:"Baloo 2",Nunito,sans-serif;margin:0;line-height:1.1}
   <p id="sheetText"></p>
   <button class="btn" id="next">Continue</button>
 </div></div>
+
+<!-- ================= CROSSWORD ================= -->
+<section class="screen" id="cross" hidden>
+  <div class="topbar">
+    <button class="icon" id="cwQuit" aria-label="Quit crossword"><svg width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <h2 style="flex:1;font-size:22px">Crossword</h2>
+    <span class="lvlpill" id="cwPill">Easy</span>
+  </div>
+  <div class="cwhead"><span class="count" id="cwProg">0 of 8 words</span><span class="count" id="cwTime">0:00</span></div>
+  <div class="gridwrap"><div class="cgrid" id="cgrid"></div></div>
+  <div class="cluebar">
+    <button class="arrow" id="cwPrev" aria-label="Previous clue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <div class="cluetxt" id="clue"></div>
+    <button class="arrow" id="cwNext" aria-label="Next clue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+  </div>
+  <div class="cwtools">
+    <button class="chip" id="cwHear"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 8.5a5 5 0 0 1 0 7"/></svg>Hear</button>
+    <button class="chip" id="cwReveal"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg>Reveal</button>
+    <button class="chip" id="cwCheck"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Check</button>
+    <button class="chip" id="cwGive"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>Give up</button>
+  </div>
+  <div class="flash" id="cwFlash" style="margin:0 0 6px;min-height:20px" aria-live="polite"></div>
+  <div class="kb" id="kb"></div>
+</section>
 
 <!-- ================= MISTAKE LIST ================= -->
 <section class="screen" id="list" hidden>
@@ -305,6 +373,7 @@ const hasWebSpeech='speechSynthesis' in window;
 const canSpeak=!!window.AndroidTTS||hasWebSpeech;
 if(!canSpeak)$('voiceNote').textContent="Your device can’t read words aloud, so each word will flash on screen briefly.";
 
+let lastMode='spell',cwLevel='easy';
 let level='easy',queue=[],i=0,score=0,results=[],answered=false,lastList=[],lastLevel='easy',hintUsed=false,listFilter='all';
 
 /* ---------- Mistake bank (saved on device) ---------- */
@@ -401,8 +470,9 @@ function speak(word,rate){
 }
 
 /* ---------- Game ---------- */
-function show(id){for(const s of ['home','game','end','list'])$(s).hidden=s!==id;window.scrollTo(0,0)}
+function show(id){for(const s of ['home','game','end','list','cross'])$(s).hidden=s!==id;window.scrollTo(0,0)}
 function begin(list){
+ lastMode='spell';
  lastList=list.slice();queue=list.slice();i=0;score=0;results=[];
  const name=level==='custom'?'Custom':level==='review'?'Wrong words':LEVELS[level].name;$('lvlpill').textContent=name;$('lvlpill2').textContent=name;
  $('segs').style.gridTemplateColumns=`repeat(${queue.length},minmax(0,1fr))`;
@@ -461,7 +531,7 @@ function finish(){
  $('arc').style.strokeDashoffset=326.7;requestAnimationFrame(()=>requestAnimationFrame(()=>{$('arc').style.strokeDashoffset=326.7*(1-pct)}));
  const stars=pct===1?3:pct>=.7?2:pct>=.4?1:0;
  $('stars').innerHTML=[0,1,2].map(k=>`<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z" fill="${k<stars?'#F5A623':'#EFE4D2'}"/></svg>`).join('');
- $('msg').textContent=pct===1?'Perfect score!':pct>=.8?'Excellent spelling!':pct>=.5?'Good job!':'Keep practicing!';
+ $('msg').textContent=lastMode==='cross'?(pct===1?'Crossword solved!':pct>=.5?'Nice solving!':'Keep practicing!'):pct===1?'Perfect score!':pct>=.8?'Excellent spelling!':pct>=.5?'Good job!':'Keep practicing!';
  $('rOk').textContent=score;$('rBad').textContent=n-score;$('rPct').textContent=Math.round(pct*100)+'%';
  $('rows').innerHTML=results.map((r,k)=>`<div class="wcard ${r.ok?'':'bad'}">
   <div class="wtop"><h3>${esc(r.w)}</h3>${r.hint?'<span class="tag hint">Hint</span>':''}<span class="tag ${r.ok?'ok':'bad'}">${r.ok?'Correct':r.given?'Wrong':'Skipped'}</span>
@@ -470,13 +540,161 @@ function finish(){
   ${r.ok?'':`<div class="yours">You wrote: ${r.given?`<s>${esc(r.given)}</s>`:'<em>nothing</em>'}</div>`}
   <div class="mean"><b>Meaning:</b> ${r.m?esc(r.m):'<em>No meaning added</em>'}</div></div>`).join('');
  $('missed').hidden=results.every(r=>r.ok);
- $('again').textContent=lastLevel==='review'?(bankList('all').length?'Practice more wrong words':'Bank of Wrong Words is empty!'):lastLevel==='custom'?'Play again':'Play again · 10 new words';
+ $('again').textContent=lastMode==='cross'?'New crossword':lastLevel==='review'?(bankList('all').length?'Practice more wrong words':'Bank of Wrong Words is empty!'):lastLevel==='custom'?'Play again':'Play again · 10 new words';
 }
 $('rows').addEventListener('click',e=>{const b=e.target.closest('.say');if(b)speak(results[b.dataset.k].w)});
-$('again').addEventListener('click',()=>{if(lastLevel==='review'){const l=bankList('all');if(!l.length){show('home');renderHome();return}practiceFrom(l);return}level=lastLevel;begin(lastLevel==='custom'?lastList:drawWords(lastLevel))});
+$('again').addEventListener('click',()=>{if(lastMode==='cross'){startCross(cwLevel);return}if(lastLevel==='review'){const l=bankList('all');if(!l.length){show('home');renderHome();return}practiceFrom(l);return}level=lastLevel;begin(lastLevel==='custom'?lastList:drawWords(lastLevel))});
 $('missed').addEventListener('click',()=>{level='review';begin(results.filter(r=>!r.ok).map(r=>[r.w,r.m,r.lv]))});
 $('change').addEventListener('click',()=>{show('home');renderHome()});
 $('home2').addEventListener('click',()=>{show('home');renderHome()});
+/* ================= CROSSWORD ================= */
+const CW_MAX=11;
+function shuffle(a){for(let k=a.length-1;k>0;k--){const r=Math.floor(Math.random()*(k+1));[a[k],a[r]]=[a[r],a[k]]}return a}
+function genCrossword(bank,target){
+ const src=bank.filter(([w])=>/^[a-z]+$/.test(w)&&w.length>=3&&w.length<=9);
+ let best=null;
+ for(let att=0;att<30;att++){
+  const pool=shuffle(src.slice()).slice(0,90);
+  const cells=new Map(),placed=[],K=(r,c)=>r+','+c;
+  let minR=0,maxR=0,minC=0,maxC=0;
+  const put=(w,m,r,c,dir)=>{const dr=dir==='d'?1:0,dc=1-dr;for(let k=0;k<w.length;k++){const kk=K(r+dr*k,c+dc*k);const e=cells.get(kk)||{ch:w[k]};e[dir]=1;cells.set(kk,e)}
+   placed.push({w,m,r,c,dir});minR=Math.min(minR,r);minC=Math.min(minC,c);maxR=Math.max(maxR,r+dr*(w.length-1));maxC=Math.max(maxC,c+dc*(w.length-1))};
+  const fits=(w,r,c,dir)=>{const dr=dir==='d'?1:0,dc=1-dr;
+   if(cells.has(K(r-dr,c-dc))||cells.has(K(r+dr*w.length,c+dc*w.length)))return -1;
+   let inter=0;
+   for(let k=0;k<w.length;k++){const rr=r+dr*k,cc=c+dc*k,e=cells.get(K(rr,cc));
+    if(e){if(e.ch!==w[k]||e[dir])return -1;inter++}
+    else if(cells.has(K(rr+dc,cc+dr))||cells.has(K(rr-dc,cc-dr)))return -1}
+   return inter};
+  const first=pool.find(([w])=>w.length>=5&&w.length<=8)||pool[0];
+  put(first[0],first[1],0,0,'a');
+  for(const [w,m] of pool){
+   if(placed.length>=target)break;if(placed.some(p=>p.w===w))continue;
+   let bp=null;
+   for(const p of placed)for(let i=0;i<p.w.length;i++)for(let j=0;j<w.length;j++){
+    if(p.w[i]!==w[j])continue;
+    const dir=p.dir==='a'?'d':'a';const pr=p.r+(p.dir==='d'?i:0),pc=p.c+(p.dir==='a'?i:0);
+    const r=dir==='d'?pr-j:pr,c=dir==='a'?pc-j:pc;
+    const s=fits(w,r,c,dir);if(s<1)continue;
+    const nR=Math.min(minR,r),xR=Math.max(maxR,dir==='d'?r+w.length-1:r),nC=Math.min(minC,c),xC=Math.max(maxC,dir==='a'?c+w.length-1:c);
+    const h=xR-nR+1,wd=xC-nC+1;if(h>CW_MAX||wd>CW_MAX)continue;
+    const sc=s*20-h*wd+(Math.abs(h-wd)<3?8:0)+Math.random()*3;
+    if(!bp||sc>bp.sc)bp={r,c,dir,sc}}
+   if(bp)put(w,m,bp.r,bp.c,bp.dir)}
+  const area=(maxR-minR+1)*(maxC-minC+1);
+  const val=placed.length*1000-area;
+  if(!best||val>best.val)best={val,placed:placed.map(p=>({...p,r:p.r-minR,c:p.c-minC})),rows:maxR-minR+1,cols:maxC-minC+1};
+  if(placed.length>=target&&att>8)break;
+ }
+ // numbering
+ const starts=[...new Set(best.placed.map(p=>p.r+','+p.c))].map(s=>s.split(',').map(Number)).sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+ const num={};starts.forEach(([r,c],k)=>num[r+','+c]=k+1);
+ const words=best.placed.map(p=>({...p,num:num[p.r+','+p.c],cells:[...p.w].map((_,k)=>p.dir==='a'?[p.r,p.c+k]:[p.r+k,p.c])}))
+  .sort((a,b)=>(a.dir===b.dir?0:a.dir==='a'?-1:1)||a.num-b.num);
+ const sol={};words.forEach(wd=>wd.cells.forEach(([r,c],k)=>sol[r+','+c]=wd.w[k]));
+ return {rows:best.rows,cols:best.cols,words,sol,num};
+}
+let cw=null,cwTimer=null;
+$('cwLv').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;cwLevel=b.dataset.l;for(const x of $('cwLv').children)x.setAttribute('aria-pressed',x===b)});
+$('cwPlay').addEventListener('click',()=>startCross(cwLevel));
+function startCross(lv){
+ cwLevel=lv;lastMode='cross';lastLevel=lv;level=lv;
+ const target={easy:8,medium:9,hard:9}[lv];
+ const p=genCrossword(LEVELS[lv].words,target);
+ cw={p,lv,fill:{},rev:new Set(),wrongW:new Set(),helped:new Set(),attempt:{},wi:0,sel:p.words[0].cells[0],start:Date.now(),over:false};
+ $('cwPill').textContent=LEVELS[lv].name;$('lvlpill2').textContent='Crossword · '+LEVELS[lv].name;
+ buildKb();show('cross');drawGrid();renderCw();
+ clearInterval(cwTimer);cwTimer=setInterval(()=>{if(!cw||cw.over||$('cross').hidden)return;const s=Math.floor((Date.now()-cw.start)/1000);$('cwTime').textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0')},1000);
+}
+function buildKb(){if($('kb').childElementCount)return;
+ const rows=['qwertyuiop','asdfghjkl','zxcvbnm'];
+ $('kb').innerHTML=rows.map((r,k)=>`<div class="kbrow">${[...r].map(ch=>`<button class="key" data-ch="${ch}">${ch.toUpperCase()}</button>`).join('')}${k===2?'<button class="key wide" data-ch="back" aria-label="Delete"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H9l-6 7 6 7h12z"/><path d="M13 10l4 4M17 10l-4 4"/></svg></button>':''}</div>`).join('');
+}
+$('kb').addEventListener('click',e=>{const b=e.target.closest('.key');if(!b||!cw||cw.over)return;b.dataset.ch==='back'?cwBack():cwType(b.dataset.ch)});
+document.addEventListener('keydown',e=>{if(!cw||cw.over||$('cross').hidden)return;
+ if(/^[a-zA-Z]$/.test(e.key)){cwType(e.key.toLowerCase());e.preventDefault()}
+ else if(e.key==='Backspace'){cwBack();e.preventDefault()}
+ else if(e.key==='ArrowRight'||e.key==='ArrowDown'){cwStep(1);e.preventDefault()}
+ else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){cwStep(-1);e.preventDefault()}});
+function drawGrid(){
+ const {rows,cols,sol,num}=cw.p;
+ const availW=Math.min(($('cross').clientWidth||360)-36,480),availH=Math.max(220,window.innerHeight*0.44);
+ const cs=Math.max(22,Math.min(42,Math.floor((availW-(cols-1)*2)/cols),Math.floor((availH-(rows-1)*2)/rows)));
+ const g=$('cgrid');g.style.setProperty('--cs',cs+'px');
+ g.style.gridTemplateColumns=`repeat(${cols},${cs}px)`;g.style.gridAutoRows=cs+'px';
+ let h='';for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const k=r+','+c;
+  h+=sol[k]?`<div class="cell" data-k="${k}">${num[k]?`<span class="n">${num[k]}</span>`:''}<span class="l"></span></div>`:'<div class="empty"></div>'}
+ g.innerHTML=h;
+}
+window.addEventListener('resize',()=>{if(cw&&!$('cross').hidden){drawGrid();renderCw()}});
+const cwWord=()=>cw.p.words[cw.wi];
+const solved=wd=>wd.cells.every(([r,c])=>cw.fill[r+','+c]===wd.w[[...wd.cells].findIndex(x=>x[0]===r&&x[1]===c)]);
+function renderCw(){
+ const wd=cwWord(),inw=new Set(wd.cells.map(x=>x.join(','))),sk=cw.sel.join(',');
+ const doneCells=new Set();cw.p.words.forEach(w=>{if(solved(w))w.cells.forEach(x=>doneCells.add(x.join(',')))});
+ for(const el of $('cgrid').querySelectorAll('.cell')){const k=el.dataset.k;
+  el.querySelector('.l').textContent=cw.fill[k]||'';
+  el.className='cell'+(doneCells.has(k)?' done':'')+(inw.has(k)?' inword':'')+(k===sk?' sel':'')+(cw.wrongCells&&cw.wrongCells.has(k)?' wrong':'')+(cw.rev.has(k)?' rev':'')}
+ const m=wd.m?maskWord(wd.m,wd.w):'(no meaning added) — tap Hear word';
+ $('clue').innerHTML=`<b>${wd.num} ${wd.dir==='a'?'ACROSS':'DOWN'} · ${wd.w.length} letters</b>${esc(m)}`;
+ const n=cw.p.words.filter(solved).length;$('cwProg').textContent=`${n} of ${cw.p.words.length} words`;
+}
+$('cgrid').addEventListener('click',e=>{const el=e.target.closest('.cell');if(!el||cw.over)return;
+ const [r,c]=el.dataset.k.split(',').map(Number);const same=cw.sel[0]===r&&cw.sel[1]===c;
+ const owners=cw.p.words.map((w,k)=>[w,k]).filter(([w])=>w.cells.some(x=>x[0]===r&&x[1]===c));
+ let pick=owners.find(([w,k])=>k===cw.wi);
+ if(same&&owners.length>1)pick=owners.find(([w,k])=>k!==cw.wi);
+ if(!pick)pick=owners.find(([w])=>w.dir===cwWord().dir)||owners[0];
+ cw.wi=pick[1];cw.sel=[r,c];renderCw()});
+function cwType(ch){
+ let k=cw.sel.join(',');
+ if(cw.rev.has(k)){const wd=cwWord();const e=wd.cells.slice(wd.cells.findIndex(x=>x.join(',')===k)).find(x=>!cw.rev.has(x.join(',')));if(!e)return;cw.sel=e;k=e.join(',')}
+ cw.fill[k]=ch;if(cw.wrongCells)cw.wrongCells.delete(k);
+ cwStep(1,true);renderCw();cwMaybeDone();
+}
+function cwBack(){const k=cw.sel.join(',');
+ if(cw.fill[k]&&!cw.rev.has(k)){delete cw.fill[k]}else{cwStep(-1,true);const k2=cw.sel.join(',');if(!cw.rev.has(k2))delete cw.fill[k2]}
+ renderCw()}
+function cwStep(d,inWordOnly){const wd=cwWord();const idx=wd.cells.findIndex(x=>x[0]===cw.sel[0]&&x[1]===cw.sel[1]);
+ const ni=idx+d;
+ if(ni>=0&&ni<wd.cells.length){cw.sel=wd.cells[ni]}
+ else if(!inWordOnly){cw.wi=(cw.wi+d+cw.p.words.length)%cw.p.words.length;const w2=cwWord();cw.sel=d>0?w2.cells[0]:w2.cells[w2.cells.length-1]}
+ else if(d>0){const nx=cw.p.words.findIndex((w,k)=>k>cw.wi&&!solved(w));const t=nx>=0?nx:cw.p.words.findIndex(w=>!solved(w));if(t>=0&&t!==cw.wi){cw.wi=t;const w2=cwWord();cw.sel=w2.cells.find(([r,c])=>!cw.fill[r+','+c])||w2.cells[0]}}
+ renderCw()}
+function goWord(d){cw.wi=(cw.wi+d+cw.p.words.length)%cw.p.words.length;const w=cwWord();cw.sel=w.cells.find(([r,c])=>!cw.fill[r+','+c])||w.cells[0];renderCw()}
+$('cwPrev').addEventListener('click',()=>goWord(-1));
+$('cwNext').addEventListener('click',()=>goWord(1));
+$('clue').addEventListener('click',()=>goWord(1));
+$('cwHear').addEventListener('click',()=>speak(cwWord().w));
+$('cwReveal').addEventListener('click',()=>{if(cw.over)return;const wd=cwWord();let k=cw.sel.join(',');
+ if(cw.fill[k]===cw.p.sol[k]){const e=wd.cells.find(([r,c])=>cw.fill[r+','+c]!==cw.p.sol[r+','+c]);if(!e)return;cw.sel=e;k=e.join(',')}
+ cw.fill[k]=cw.p.sol[k];cw.rev.add(k);if(cw.wrongCells)cw.wrongCells.delete(k);
+ cw.p.words.forEach(w=>{if(w.cells.some(x=>x.join(',')===k))cw.helped.add(w.w)});
+ cwStep(1,true);renderCw();cwMaybeDone()});
+$('cwCheck').addEventListener('click',()=>{if(cw.over)return;cw.wrongCells=new Set();let bad=0;
+ for(const [k,v] of Object.entries(cw.fill))if(v!==cw.p.sol[k]){cw.wrongCells.add(k);bad++}
+ cw.p.words.forEach(w=>{if(w.cells.some(x=>cw.wrongCells.has(x.join(',')))){cw.wrongW.add(w.w);cw.attempt[w.w]=w.cells.map(([r,c])=>cw.fill[r+','+c]||'_').join('')}});
+ $('cwFlash').textContent=bad?`${bad} wrong letter${bad>1?'s':''} marked in red`:'Everything so far is correct!';
+ setTimeout(()=>{$('cwFlash').textContent=''},2500);renderCw()});
+$('cwGive').addEventListener('click',()=>{if(cw.over)return;$('cwFlash').textContent='Tap Give up again to show all answers';
+ if($('cwGive').dataset.arm){delete $('cwGive').dataset.arm;cwFinish(true);return}
+ $('cwGive').dataset.arm=1;setTimeout(()=>{delete $('cwGive').dataset.arm;$('cwFlash').textContent=''},3000)});
+$('cwQuit').addEventListener('click',()=>{if(cw)cw.over=true;clearInterval(cwTimer);show('home');renderHome()});
+window.__cw=()=>cw;
+function cwMaybeDone(){if(cw.p.words.every(solved))setTimeout(()=>cwFinish(false),450)}
+function cwFinish(gaveUp){
+ if(cw.over)return;cw.over=true;clearInterval(cwTimer);
+ const words=cw.p.words.slice().sort((a,b)=>a.num-b.num||(a.dir==='a'?-1:1));
+ results=words.map(wd=>{const typed=wd.cells.map(([r,c])=>cw.fill[r+','+c]||'').join('');
+  const solvedNow=solved(wd);const ok=solvedNow&&!cw.wrongW.has(wd.w)&&!cw.helped.has(wd.w);
+  const given=!ok?(cw.attempt[wd.w]||(solvedNow?'':typed.replace(/ /g,''))):typed;
+  const r={w:wd.w,m:wd.m,given,ok,hint:cw.helped.has(wd.w),lv:cw.lv};
+  if(ok)r.fixed=fixMistake(wd.w);else addMistake(wd.w,wd.m,cw.lv);
+  return r});
+ score=results.filter(r=>r.ok).length;
+ if(gaveUp){words.forEach(wd=>wd.cells.forEach(([r,c])=>{cw.fill[r+','+c]=cw.p.sol[r+','+c]}));renderCw();setTimeout(finish,900)}else finish();
+}
+
 if(!window.AndroidTTS&&hasWebSpeech)speechSynthesis.getVoices();
 renderHome();
 }
