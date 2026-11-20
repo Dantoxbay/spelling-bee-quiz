@@ -69,6 +69,29 @@ h1,h2,h3{font-family:"Baloo 2",Nunito,sans-serif;margin:0;line-height:1.1}
 .btn:disabled{background:#EDE4D6;color:#A99C8B;box-shadow:0 4px 0 #DCD0BE;cursor:default}
 .foot{text-align:center;font-size:12.5px;color:var(--ink3);margin-top:22px}
 
+/* ---------- Mistake bank ---------- */
+.mbank{background:linear-gradient(150deg,#FFF0EF,#FFE3E1);border-radius:var(--r);padding:16px;box-shadow:var(--sh);border:2px solid #FBD3D0}
+.mbank .row1{display:flex;align-items:center;gap:14px}
+.mbank .mi{width:52px;height:52px;border-radius:16px;background:var(--bad);display:grid;place-items:center;flex:none}
+.mbank h3{font-size:19px}
+.mbank .sub{font:700 13.5px Nunito,system-ui,Roboto,sans-serif;color:#8C3B3B}
+.mbank .big{font:800 30px "Baloo 2",Nunito,system-ui,Roboto,sans-serif;color:var(--bad);margin-left:auto;line-height:1}
+.mbank .btns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:14px}
+.mbank .btn{min-height:48px;font-size:15.5px}
+.mbank.empty{background:var(--card);border-color:var(--line)}
+.mbank.empty .mi{background:var(--ok)}
+.mbank.empty .sub{color:var(--ink2)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px}
+.filters button{border:2px solid var(--line);background:var(--card);border-radius:99px;padding:7px 14px;min-height:40px;font:800 14px Nunito,system-ui,Roboto,sans-serif;color:var(--ink2)}
+.filters button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.mcard{background:var(--card);border-radius:18px;box-shadow:var(--sh);padding:14px 16px}
+.mcard .wtop h3{font-size:19px}
+.lvtag{font:900 11.5px Nunito,system-ui,Roboto,sans-serif;padding:3px 9px;border-radius:99px;color:#fff;flex:none}
+.missn{font:800 13px Nunito,system-ui,Roboto,sans-serif;color:var(--bad);margin-top:2px}
+.del{width:40px;height:40px;border-radius:12px;border:0;background:#F6EFE4;color:var(--ink3);display:grid;place-items:center;flex:none}
+.emptybox{text-align:center;padding:40px 20px;color:var(--ink2);font-weight:700}
+.notice{margin-top:14px;background:#FFF0EF;color:#8C3B3B;border-radius:14px;padding:10px 14px;font:800 14px Nunito,system-ui,Roboto,sans-serif;text-align:center}
+.linkbtn{border:0;background:none;color:var(--ink3);font:800 14px Nunito,system-ui,Roboto,sans-serif;padding:10px;min-height:44px;text-decoration:underline}
 /* ---------- Game ---------- */
 .topbar{display:flex;align-items:center;gap:12px}
 .icon{width:44px;height:44px;border-radius:14px;border:0;background:var(--card);box-shadow:var(--sh);display:grid;place-items:center;flex:none}
@@ -167,6 +190,9 @@ h1,h2,h3{font-family:"Baloo 2",Nunito,sans-serif;margin:0;line-height:1.1}
   <div class="sec"><h2>Choose a level</h2><span class="muted" style="font-size:13px;font-weight:800">10 words per game</span></div>
   <div class="levels" id="levels"></div>
 
+  <div class="sec"><h2>Bank of Wrong Words</h2></div>
+  <div class="mbank" id="mbank"></div>
+
   <div class="sec"><h2>Your own list</h2></div>
   <details class="custom" id="customBox">
     <summary><span>Make a custom quiz</span><span class="chev" aria-hidden="true">+</span></summary>
@@ -217,6 +243,25 @@ h1,h2,h3{font-family:"Baloo 2",Nunito,sans-serif;margin:0;line-height:1.1}
   <button class="btn" id="next">Continue</button>
 </div></div>
 
+<!-- ================= MISTAKE LIST ================= -->
+<section class="screen" id="list" hidden>
+  <div class="topbar"><button class="icon" id="listBack" aria-label="Back to home"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><h2 style="font-size:24px;flex:1">Bank of Wrong Words</h2></div>
+  <p class="muted" style="margin:10px 2px 0;font-weight:700">Words you missed, saved on this phone. Spell a word correctly 5 times and it leaves the bank. Missing it again resets its count.</p>
+  <div class="filters" id="filters"></div>
+  <div class="words" id="mlist"></div>
+  <div class="actions" id="listActions">
+    <button class="btn bad" id="listPractice">Practice these words</button>
+    <button class="linkbtn" id="clearAll">Clear all wrong words</button>
+  </div>
+</section>
+
+<!-- confirm dialog -->
+<div class="sheet" id="confirm"><div class="in" style="background:var(--card)">
+  <h3>Clear all wrong words?</h3>
+  <p>This removes every word from your Bank of Wrong Words. It can’t be undone.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><button class="btn ghost" id="cNo">Cancel</button><button class="btn bad" id="cYes">Clear all</button></div>
+</div></div>
+
 <!-- ================= RESULTS ================= -->
 <section class="screen" id="end" hidden>
   <div class="topbar"><button class="icon" id="home2" aria-label="Back to home"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div style="flex:1"></div><span class="lvlpill" id="lvlpill2">Easy</span></div>
@@ -232,6 +277,7 @@ h1,h2,h3{font-family:"Baloo 2",Nunito,sans-serif;margin:0;line-height:1.1}
     <div><b id="rBad" style="color:var(--bad)">0</b><small>To review</small></div>
     <div><b id="rPct">0%</b><small>Accuracy</small></div>
   </div>
+  <div class="notice" id="bankNote" hidden></div>
   <div class="sec" style="margin-top:18px"><h2>Words & meanings</h2></div>
   <div class="words" id="rows"></div>
   <div class="actions">
@@ -259,10 +305,62 @@ const hasWebSpeech='speechSynthesis' in window;
 const canSpeak=!!window.AndroidTTS||hasWebSpeech;
 if(!canSpeak)$('voiceNote').textContent="Your device can’t read words aloud, so each word will flash on screen briefly.";
 
-let level='easy',queue=[],i=0,score=0,results=[],answered=false,lastList=[],lastLevel='easy',hintUsed=false;
+let level='easy',queue=[],i=0,score=0,results=[],answered=false,lastList=[],lastLevel='easy',hintUsed=false,listFilter='all';
+
+/* ---------- Mistake bank (saved on device) ---------- */
+const LVCOL={easy:'#22A05B',medium:'#3D7BF7',hard:'#8A5CF6',custom:'#8E8377'};
+const LVNAME={easy:'Easy',medium:'Medium',hard:'Hard',custom:'Custom'};
+const getBank=()=>store.get('mistakes',{});
+const setBank=b=>store.set('mistakes',b);
+const NEED=5; // correct spellings needed to leave the bank
+function addMistake(w,m,lv){const b=getBank();const k=w.toLowerCase();const e=b[k]||{w,m,lv,n:0};e.n++;e.ok=0;e.t=Date.now();if(m)e.m=m;b[k]=e;setBank(b)}
+// returns 'removed', 'progress' or ''
+function fixMistake(w){const b=getBank();const k=w.toLowerCase();const e=b[k];if(!e)return '';
+ e.ok=(e.ok||0)+1;e.t=Date.now();if(e.ok>=NEED){delete b[k];setBank(b);return 'removed'}b[k]=e;setBank(b);return 'progress'}
+function removeWord(w){const b=getBank();delete b[w.toLowerCase()];setBank(b)}
+const okDots=e=>`<span style="letter-spacing:2px;color:var(--ok)">${'●'.repeat(e.ok||0)}</span><span style="letter-spacing:2px;color:#E2D6C2">${'●'.repeat(NEED-(e.ok||0))}</span>`;
+function bankList(f){return Object.values(getBank()).filter(e=>f==='all'||e.lv===f).sort((a,b)=>b.n-a.n||b.t-a.t)}
+function renderBank(){
+ const all=bankList('all'),n=all.length,box=$('mbank');
+ box.className='mbank'+(n?'':' empty');
+ const counts={};all.forEach(e=>counts[e.lv]=(counts[e.lv]||0)+1);
+ const parts=Object.keys(LVNAME).filter(k=>counts[k]).map(k=>`${counts[k]} ${LVNAME[k]}`).join(' · ');
+ box.innerHTML=`<div class="row1"><span class="mi">${n?'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/></svg>':'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12.5l4 4L18 8"/></svg>'}</span>
+  <span><h3>${n?'Words to practice':'No wrong words yet'}</h3><span class="sub">${n?parts:'Words you miss will be saved here.'}</span></span>
+  ${n?`<span class="big">${n}</span>`:''}</div>
+  ${n?`<div class="btns"><button class="btn bad" id="bankPlay">Practice</button><button class="btn ghost" id="bankView">View list</button></div>`:''}`;
+}
+function practiceFrom(list){
+ const pool=list.slice(0,40);for(let a=pool.length-1;a>0;a--){const r=Math.floor(Math.random()*(a+1));[pool[a],pool[r]]=[pool[r],pool[a]]}
+ level=lastLevel='review';begin(pool.slice(0,QUIZ).map(e=>[e.w,e.m,e.lv]));
+}
+$('mbank').addEventListener('click',e=>{
+ if(e.target.closest('#bankPlay'))practiceFrom(bankList('all'));
+ if(e.target.closest('#bankView')){listFilter='all';renderList();show('list')}
+});
+function renderList(){
+ const all=bankList('all');const counts={all:all.length};all.forEach(e=>counts[e.lv]=(counts[e.lv]||0)+1);
+ $('filters').innerHTML=['all','easy','medium','hard','custom'].filter(k=>k==='all'||counts[k]).map(k=>`<button data-f="${k}" aria-pressed="${k===listFilter}">${k==='all'?'All':LVNAME[k]} (${counts[k]||0})</button>`).join('');
+ const list=bankList(listFilter);
+ $('listActions').hidden=!all.length;
+ $('listPractice').textContent=list.length>QUIZ?`Practice 10 of these ${list.length} words`:`Practice ${list.length===1?'this word':'these '+list.length+' words'}`;
+ $('mlist').innerHTML=list.length?list.map(e=>`<div class="mcard"><div class="wtop"><h3>${esc(e.w)}</h3><span class="lvtag" style="background:${LVCOL[e.lv]||'#8E8377'}">${LVNAME[e.lv]||'Custom'}</span>
+  <button class="say" data-w="${esc(e.w)}" aria-label="Hear ${esc(e.w)}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 8.5a5 5 0 0 1 0 7"/></svg></button>
+  <button class="del" data-d="${esc(e.w)}" aria-label="Remove ${esc(e.w)}"><svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="missn">Missed ${e.n} time${e.n>1?'s':''} · <span style="color:var(--ink2)">Correct ${e.ok||0} of ${NEED}</span> ${okDots(e)}</div>
+  <div class="mean"><b>Meaning:</b> ${e.m?esc(e.m):'<em>No meaning added</em>'}</div></div>`).join(''):'<div class="emptybox">No words here. Great job!</div>';
+}
+$('filters').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;listFilter=b.dataset.f;renderList()});
+$('mlist').addEventListener('click',e=>{const s=e.target.closest('.say');if(s)speak(s.dataset.w);const d=e.target.closest('.del');if(d){removeWord(d.dataset.d);if(!bankList(listFilter).length)listFilter='all';renderList()}});
+$('listPractice').addEventListener('click',()=>practiceFrom(bankList(listFilter)));
+$('listBack').addEventListener('click',()=>{show('home');renderHome()});
+$('clearAll').addEventListener('click',()=>{$('confirm').className='sheet show'});
+$('cNo').addEventListener('click',()=>{$('confirm').className='sheet'});
+$('cYes').addEventListener('click',()=>{setBank({});$('confirm').className='sheet';listFilter='all';renderList()});
 
 /* ---------- Home ---------- */
 function renderHome(){
+ renderBank();
  const st=store.get('stats',{games:0,right:0,total:0,best:0});
  $('sGames').textContent=st.games;
  $('sAcc').textContent=st.total?Math.round(st.right/st.total*100)+'%':'–';
@@ -303,10 +401,10 @@ function speak(word,rate){
 }
 
 /* ---------- Game ---------- */
-function show(id){for(const s of ['home','game','end'])$(s).hidden=s!==id;window.scrollTo(0,0)}
+function show(id){for(const s of ['home','game','end','list'])$(s).hidden=s!==id;window.scrollTo(0,0)}
 function begin(list){
  lastList=list.slice();queue=list.slice();i=0;score=0;results=[];
- const name=level==='custom'?'Custom':LEVELS[level].name;$('lvlpill').textContent=name;$('lvlpill2').textContent=name;
+ const name=level==='custom'?'Custom':level==='review'?'Wrong words':LEVELS[level].name;$('lvlpill').textContent=name;$('lvlpill2').textContent=name;
  $('segs').style.gridTemplateColumns=`repeat(${queue.length},minmax(0,1fr))`;
  $('segs').innerHTML=queue.map(()=>'<span class="seg"></span>').join('');
  show('game');next();
@@ -334,12 +432,14 @@ $('check').addEventListener('click',()=>{if(!answered&&$('ans').value.trim())jud
 $('skip').addEventListener('click',()=>{if(!answered)judge('')});
 function judge(given){
  const [w,m]=queue[i];const ok=norm(given)===norm(w);
- if(ok)score++;results.push({w,m,given,ok,hint:hintUsed});answered=true;$('ans').disabled=true;delete $('dots').dataset.n;
+ const lv=queue[i][2]||level;if(ok)score++;results.push({w,m,given,ok,hint:hintUsed,lv});
+ if(ok){results[results.length-1].fixed=fixMistake(w)}else addMistake(w,m,lv==='review'?'custom':lv);answered=true;$('ans').disabled=true;delete $('dots').dataset.n;
  const seg=$('segs').children[i];seg.classList.remove('now');seg.classList.add(ok?'ok':'bad');
  const sh=$('sheet');sh.className='sheet show '+(ok?'ok':'bad');
  $('sheetTitle').innerHTML=ok?'<svg width="28" height="28" viewBox="0 0 24 24" fill="#22A05B"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Correct!':
   '<svg width="28" height="28" viewBox="0 0 24 24" fill="#E04848"><circle cx="12" cy="12" r="11"/><path d="M8 8l8 8M16 8l-8 8" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>'+(given?'Not quite':'Skipped');
- $('sheetText').innerHTML=ok?['Great spelling!','You nailed it!','Perfect!','Well done!'][score%4]:`Correct spelling: <span class="right">${esc(w)}</span>`;
+ const rr=results[results.length-1];
+ $('sheetText').innerHTML=ok?(rr.fixed==='removed'?'5 of 5 correct: removed from your Bank of Wrong Words!':rr.fixed==='progress'?`Bank of Wrong Words: ${(getBank()[w.toLowerCase()]||{}).ok} of ${NEED} correct`:['Great spelling!','You nailed it!','Perfect!','Well done!'][score%4]):`Correct spelling: <span class="right">${esc(w)}</span><br><span style="font-size:13px">Saved to your Bank of Wrong Words</span>`;
  const nb=$('next');nb.className='btn '+(ok?'ok':'bad');nb.textContent=i+1<queue.length?'Continue':'See results';nb.focus();
 }
 $('next').addEventListener('click',()=>{if(!answered)return;i++;i<queue.length?next():finish()});
@@ -351,7 +451,10 @@ function finish(){
  const n=results.length,pct=score/n;
  const st=store.get('stats',{games:0,right:0,total:0,best:0});
  st.games++;st.right+=score;st.total+=n;if(n===10)st.best=Math.max(st.best,score);store.set('stats',st);
- if(level!=='custom'){const ms=new Set(store.get('mastered_'+level,[]));results.forEach(r=>{if(r.ok)ms.add(r.w)});store.set('mastered_'+level,[...ms])}
+ results.forEach(r=>{if(r.ok&&LEVELS[r.lv]){const ms=new Set(store.get('mastered_'+r.lv,[]));ms.add(r.w);store.set('mastered_'+r.lv,[...ms])}});
+ const added=results.filter(r=>!r.ok).length,fixed=results.filter(r=>r.fixed==='removed').length,prog=results.filter(r=>r.fixed==='progress').length,left=bankList('all').length;
+ const note=[];if(added)note.push(`${added} saved to your Bank of Wrong Words`);if(prog)note.push(`${prog} getting closer`);if(fixed)note.push(`${fixed} mastered and removed 🎉`);
+ $('bankNote').hidden=!note.length;$('bankNote').textContent=note.length?note.join(' · ')+` (${left} left)`:'';
  show('end');
  $('final').textContent=score;$('outof').textContent=`out of ${n}`;
  $('arc').style.stroke=pct>=.8?'#22A05B':pct>=.5?'#F5A623':'#E04848';
@@ -363,13 +466,15 @@ function finish(){
  $('rows').innerHTML=results.map((r,k)=>`<div class="wcard ${r.ok?'':'bad'}">
   <div class="wtop"><h3>${esc(r.w)}</h3>${r.hint?'<span class="tag hint">Hint</span>':''}<span class="tag ${r.ok?'ok':'bad'}">${r.ok?'Correct':r.given?'Wrong':'Skipped'}</span>
   <button class="say" data-k="${k}" aria-label="Hear ${esc(r.w)}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 8.5a5 5 0 0 1 0 7"/></svg></button></div>
+  ${r.fixed==='progress'?`<div class="yours" style="color:var(--ok)">Bank of Wrong Words: ${(getBank()[r.w.toLowerCase()]||{}).ok||0} of ${NEED} correct</div>`:r.fixed==='removed'?'<div class="yours" style="color:var(--ok)">Mastered: removed from Bank of Wrong Words</div>':''}
   ${r.ok?'':`<div class="yours">You wrote: ${r.given?`<s>${esc(r.given)}</s>`:'<em>nothing</em>'}</div>`}
   <div class="mean"><b>Meaning:</b> ${r.m?esc(r.m):'<em>No meaning added</em>'}</div></div>`).join('');
  $('missed').hidden=results.every(r=>r.ok);
+ $('again').textContent=lastLevel==='review'?(bankList('all').length?'Practice more wrong words':'Bank of Wrong Words is empty!'):lastLevel==='custom'?'Play again':'Play again · 10 new words';
 }
 $('rows').addEventListener('click',e=>{const b=e.target.closest('.say');if(b)speak(results[b.dataset.k].w)});
-$('again').addEventListener('click',()=>{level=lastLevel;begin(lastLevel==='custom'?lastList:drawWords(lastLevel))});
-$('missed').addEventListener('click',()=>begin(results.filter(r=>!r.ok).map(r=>[r.w,r.m])));
+$('again').addEventListener('click',()=>{if(lastLevel==='review'){const l=bankList('all');if(!l.length){show('home');renderHome();return}practiceFrom(l);return}level=lastLevel;begin(lastLevel==='custom'?lastList:drawWords(lastLevel))});
+$('missed').addEventListener('click',()=>{level='review';begin(results.filter(r=>!r.ok).map(r=>[r.w,r.m,r.lv]))});
 $('change').addEventListener('click',()=>{show('home');renderHome()});
 $('home2').addEventListener('click',()=>{show('home');renderHome()});
 if(!window.AndroidTTS&&hasWebSpeech)speechSynthesis.getVoices();
