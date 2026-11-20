@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- honeycomb hexagon -->
+    <path android:fillColor="#F2A814"
+        android:pathData="M54,24 L80,39 L80,69 L54,84 L28,69 L28,39 Z" />
+    <!-- letters "Ab" style speaker mark -->
+    <path android:fillColor="#2B1A08"
+        android:pathData="M40,48 L46,48 L53,42 L53,66 L46,60 L40,60 Z" />
+    <path android:strokeColor="#2B1A08" android:strokeWidth="3.5"
+        android:strokeLineCap="round" android:fillColor="#00000000"
+        android:pathData="M58,47 Q63,54 58,61 M62,43 Q70,54 62,65" />
+</vector>

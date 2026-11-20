@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spelling Bee Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/*
+VOICE: cheerful school spelling bee, clear and friendly for kids and adults
+IDEA: a honeycomb spelling-bee stage card with a big "hear the word" button
+PICTURE: the live game card itself, with a large hexagon speaker button
+COLOUR and TYPE: honey yellow ground, deep brown ink, leaf-green correct, red wrong; Baloo 2 titles, Nunito body
+LAYOUT: one centred column: title, game card, then results with meanings at the end
+*/
+:root{color-scheme:light;
+--bg:#fbd35a;--card:#fffaf0;--ink:#2b1a08;
+--soft:#7a5a2e;--line:#ecd9ad;--honey:#f2a814;--brown:#2b1a08;
+--onbrown:#fff4dc;--ok:#1f7a3a;--bad:#b3261e;--okbg:#e3f4e6;--badbg:#fbe3e1}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Nunito,system-ui,sans-serif;overflow-x:clip;
+background-image:radial-gradient(circle at 12% 8%,rgba(255,255,255,.35),transparent 40%)}
+.wrap{max-width:760px;margin:0 auto;padding:clamp(20px,4vw,48px) max(4vw,14px) 48px}
+h1{font:800 clamp(32px,6vw,48px)/1.05 "Baloo 2",sans-serif;margin:0 0 4px;text-wrap:balance}
+.sub{margin:0 0 20px;color:var(--soft);font-weight:600}
+.card{background:var(--card);border-radius:22px;padding:clamp(18px,4vw,32px);box-shadow:0 10px 0 rgba(43,26,8,.18),0 18px 40px rgba(43,26,8,.15)}
+h2{font:800 24px/1.1 "Baloo 2",sans-serif;margin:0 0 12px}
+.levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+.lvl{border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:14px;padding:12px 14px;text-align:left;cursor:pointer;font:inherit;min-height:44px}
+.lvl b{display:block;font:800 18px "Baloo 2",sans-serif}.lvl span{color:var(--soft);font-size:14px}
+.lvl[aria-pressed=true]{border-color:var(--honey);background:#fff1c9}
+label{font-weight:800;display:block;margin:8px 0 6px}
+textarea,input[type=text]{width:100%;font:16px Nunito,sans-serif;color:var(--ink);background:#fff;border:2px solid var(--line);border-radius:12px;padding:12px}
+textarea{min-height:150px;resize:vertical}
+.hint{font-size:14px;color:var(--soft);margin:6px 0 0}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;align-items:center}
+.btn{font:800 17px Nunito,sans-serif;border:0;border-radius:14px;padding:12px 20px;min-height:48px;cursor:pointer;background:var(--brown);color:var(--onbrown)}
+.btn.alt{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.btn:focus-visible,.lvl:focus-visible,input:focus-visible,textarea:focus-visible,.hex:focus-visible{outline:3px solid var(--honey);outline-offset:3px}
+.btn:disabled{opacity:.45;cursor:default}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;font-weight:800;color:var(--soft)}
+.bar{height:10px;background:var(--line);border-radius:9px;overflow:hidden;margin-bottom:22px}.bar i{display:block;height:100%;background:var(--honey);transition:width .3s}
+.stage{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:center}
+.hex{width:150px;aspect-ratio:1/1.1;border:0;cursor:pointer;background:var(--honey);color:#2b1a08;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);display:grid;place-items:center;font:800 16px "Baloo 2",sans-serif;transition:transform .15s}
+.hex svg{width:54px;height:54px;display:block;margin:0 auto 2px}.hex:active{transform:scale(.95)}
+.hex.talking{animation:pulse .8s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.06)}}
+@media(prefers-reduced-motion:reduce){.hex.talking{animation:none}.bar i{transition:none}}
+.answer{font:800 24px Nunito,sans-serif !important;letter-spacing:.04em;text-align:center}
+.small{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{font:700 14px Nunito,sans-serif;border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:99px;padding:8px 14px;min-height:40px;cursor:pointer}
+.flash{min-height:28px;margin-top:10px;font-weight:800;text-align:center}
+.fb{margin-top:16px;border-radius:14px;padding:12px 16px;font-weight:800}
+.fb.ok{background:var(--okbg);color:var(--ok)}.fb.bad{background:var(--badbg);color:var(--bad)}
+.score{display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px;align-items:center;margin-bottom:18px}
+.big{font:800 clamp(52px,12vw,80px)/1 "Baloo 2",sans-serif}
+.big small{font-size:.45em;color:var(--soft)}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{text-align:left;font-size:13px;color:var(--soft);padding:8px 6px;border-bottom:2px solid var(--line)}
+td{padding:10px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+td.w{font-weight:800;white-space:nowrap}.res{white-space:nowrap;font-weight:800}
+.res.ok{color:var(--ok)}.res.bad{color:var(--bad)}
+.your.bad{text-decoration:line-through;color:var(--bad)}
+.say{border:0;background:none;cursor:pointer;color:var(--soft);font-size:15px;padding:0 4px;min-height:32px}
+.note{font-size:13px;color:var(--soft);margin-top:14px}
+[hidden]{display:none !important}
+@media(max-width:600px){.stage{grid-template-columns:1fr;justify-items:center}.hex{width:130px}.score{grid-template-columns:1fr}
+table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:7em;text-align:start;white-space:normal}.stack td::before{content:attr(data-l);float:inline-start;width:6.5em;margin-inline-start:-7em;color:var(--soft);font-weight:700}.stack td:empty{display:none}}
+</style>
+<script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
+</head>
+<body>
+<div class="wrap">
+  <h1>Spelling Bee Quiz</h1>
+  <p class="sub">Listen, spell, and learn what each word means at the end.</p>
+
+  <section class="card" id="setup">
+    <h2>Pick your word list</h2>
+    <div class="levels" id="levels"></div>
+    <div id="customBox" hidden>
+      <label for="custom">Your words (one per line: word - meaning)</label>
+      <textarea id="custom" placeholder="necessary - needed; must be done&#10;receive - to get or be given something"></textarea>
+      <p class="hint">The meaning is optional. Words without one will show “No meaning added.”</p>
+    </div>
+    <div class="row">
+      <label style="margin:0;display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="shuffle" checked style="width:20px;height:20px"> Shuffle the words</label>
+    </div>
+    <div class="row"><button class="btn" id="start">Start the quiz</button></div>
+    <p class="note" id="voiceNote" hidden>Your browser can’t read words aloud, so each word will flash on screen for a moment instead.</p>
+  </section>
+
+  <section class="card" id="game" hidden>
+    <div class="top"><span id="count">Word 1 of 10</span><span id="live">Score 0</span></div>
+    <div class="bar"><i id="prog" style="width:0"></i></div>
+    <div class="stage">
+      <button class="hex" id="hear" aria-label="Hear the word">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>Hear word</span>
+      </button>
+      <form id="form" autocomplete="off">
+        <label for="ans">Type the spelling</label>
+        <input type="text" id="ans" class="answer" autocapitalize="off" autocorrect="off" spellcheck="false">
+        <div class="small">
+          <button type="button" class="chip" id="slow">Say it slowly</button>
+          <button type="button" class="chip" id="letters">How many letters?</button>
+        </div>
+        <div class="flash" id="flash" aria-live="polite"></div>
+        <div class="row">
+          <button class="btn" id="check" type="submit">Check</button>
+          <button class="btn alt" id="skip" type="button">Skip</button>
+        </div>
+      </form>
+    </div>
+    <div class="fb" id="fb" hidden aria-live="polite"></div>
+  </section>
+
+  <section class="card" id="end" hidden>
+    <div class="score">
+      <div class="big" id="final">0<small>/10</small></div>
+      <div><h2 id="msg" style="margin:0 0 4px">Nice work!</h2><p style="margin:0;color:var(--soft);font-weight:600">Here are all the words with their meanings.</p></div>
+    </div>
+    <table class="stack">
+      <thead><tr><th>Word</th><th>Your answer</th><th>Result</th><th>Meaning</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <div class="row">
+      <button class="btn" id="again">Play again</button>
+      <button class="btn alt" id="missed">Practise the missed words</button>
+      <button class="btn alt" id="change">Change word list</button>
+    </div>
+  </section>
+</div>
+
+<script>
+{
+const LISTS={
+ easy:{name:"Easy",tag:"Everyday words",words:[
+  ["because","for the reason that"],["friend","a person you know well and like"],["believe","to accept that something is true"],
+  ["answer","a reply to a question"],["surprise","something you did not expect"],["tomorrow","the day after today"],
+  ["different","not the same as another"],["library","a place where books are kept for reading or borrowing"],
+  ["family","parents and their children; relatives"],["beautiful","very pleasing to look at"]]},
+ medium:{name:"Medium",tag:"Often misspelled",words:[
+  ["necessary","needed; must be done"],["separate","apart; not joined together"],["definitely","without any doubt"],
+  ["receive","to get or be given something"],["government","the group that runs a country or area"],
+  ["environment","the natural world around us"],["business","buying and selling goods or services to earn money"],
+  ["calendar","a chart showing the days, weeks and months of a year"],["accommodate","to provide a place to stay, or to adjust to someone's needs"],
+  ["schedule","a plan of when things will happen"]]},
+ hard:{name:"Hard",tag:"Spelling-bee level",words:[
+  ["entrepreneur","a person who starts and runs a business"],["conscientious","careful and wanting to do things right"],
+  ["bureaucracy","a system of government offices with many rules"],["miscellaneous","made up of many different kinds"],
+  ["questionnaire","a written set of questions to gather information"],["rhythm","a regular, repeated pattern of sound or movement"],
+  ["liaison","a person who links two groups so they can work together"],["millennium","a period of one thousand years"],
+  ["occurrence","something that happens"],["acquiesce","to agree quietly without arguing"]]},
+ custom:{name:"My own words",tag:"Type your list",words:[]}
+};
+const $=id=>document.getElementById(id);
+const canSpeak=!!window.AndroidTTS||('speechSynthesis' in window);
+let level='medium',queue=[],i=0,score=0,results=[],answered=false,lastList=[];
+if(!canSpeak)$('voiceNote').hidden=false;
+
+function drawLevels(){
+ $('levels').innerHTML=Object.entries(LISTS).map(([k,v])=>`<button class="lvl" data-k="${k}" aria-pressed="${k===level}"><b>${v.name}</b><span>${v.tag}</span></button>`).join('');
+ $('customBox').hidden=level!=='custom';
+}
+$('levels').addEventListener('click',e=>{const b=e.target.closest('.lvl');if(!b)return;level=b.dataset.k;drawLevels()});
+drawLevels();
+
+function parseCustom(){
+ return $('custom').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
+  const m=l.split(/\s+[-–—:]\s+|\t/);const w=(m.shift()||'').trim();return [w,m.join(' - ').trim()];
+ }).filter(x=>x[0]);
+}
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm=s=>s.trim().toLowerCase().replace(/\s+/g,' ');
+
+function speak(word,rate){
+ if(window.AndroidTTS){try{AndroidTTS.speak(word,rate||0.85);const h=$('hear');h.classList.add('talking');setTimeout(()=>h.classList.remove('talking'),1200);return}catch(e){}}
+ if(!canSpeak){$('flash').textContent=word;setTimeout(()=>{$('flash').textContent=''},1500);return}
+ try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(word);u.lang='en-US';u.rate=rate||0.85;
+  const v=speechSynthesis.getVoices().find(v=>/^en(-|_)(US|GB|PH)/i.test(v.lang));if(v)u.voice=v;
+  $('hear').classList.add('talking');u.onend=u.onerror=()=>$('hear').classList.remove('talking');
+  speechSynthesis.speak(u);}catch(e){$('flash').textContent=word;setTimeout(()=>{$('flash').textContent=''},1500)}
+}
+
+function begin(list){
+ if(!list.length){$('custom').focus();$('custom').placeholder='Please type at least one word here first.';return}
+ lastList=list.slice();queue=list.slice();
+ if($('shuffle').checked)for(let a=queue.length-1;a>0;a--){const b=Math.floor(Math.random()*(a+1));[queue[a],queue[b]]=[queue[b],queue[a]]}
+ i=0;score=0;results=[];
+ $('setup').hidden=true;$('end').hidden=true;$('game').hidden=false;
+ show();
+}
+function show(){
+ answered=false;const n=queue.length;
+ $('count').textContent=`Word ${i+1} of ${n}`;$('live').textContent=`Score ${score}`;
+ $('prog').style.width=(i/n*100)+'%';
+ $('ans').value='';$('ans').disabled=false;$('flash').textContent='';$('fb').hidden=true;
+ $('check').textContent='Check';$('skip').hidden=false;$('ans').focus();
+ speak(queue[i][0]);
+}
+function judge(given){
+ const [w,m]=queue[i];const ok=norm(given)===norm(w);
+ if(ok)score++;results.push({w,m,given,ok});answered=true;
+ $('ans').disabled=true;$('skip').hidden=true;$('live').textContent=`Score ${score}`;
+ const fb=$('fb');fb.hidden=false;fb.className='fb '+(ok?'ok':'bad');
+ fb.innerHTML=ok?'Correct! Well spelled.':`Not quite. The correct spelling is <span style="letter-spacing:.05em">${esc(w)}</span>.`;
+ $('check').textContent=i+1<queue.length?'Next word':'See results';$('check').focus();
+}
+$('form').addEventListener('submit',e=>{e.preventDefault();
+ if(answered){i++;i<queue.length?show():finish();return}
+ if(!$('ans').value.trim()){$('flash').textContent='Type your spelling first, or press Skip.';return}
+ judge($('ans').value);
+});
+$('skip').addEventListener('click',()=>judge(''));
+$('hear').addEventListener('click',()=>speak(queue[i][0]));
+$('slow').addEventListener('click',()=>speak(queue[i][0],0.5));
+$('letters').addEventListener('click',()=>{$('flash').textContent=`This word has ${queue[i][0].replace(/\s/g,'').length} letters.`});
+
+function finish(){
+ $('game').hidden=true;$('end').hidden=false;$('prog').style.width='100%';
+ const n=results.length,pct=score/n;
+ $('final').innerHTML=`${score}<small>/${n}</small>`;
+ $('msg').textContent=pct===1?'Perfect score!':pct>=.8?'Excellent spelling!':pct>=.5?'Good job, keep practising!':'Keep going, you’re learning!';
+ $('rows').innerHTML=results.map((r,k)=>`<tr>
+  <td class="w">${esc(r.w)} <button class="say" data-k="${k}" aria-label="Hear ${esc(r.w)}">🔊</button></td>
+  <td class="your ${r.ok?'':'bad'}">${r.given?esc(r.given):'<em>skipped</em>'}</td>
+  <td class="res ${r.ok?'ok':'bad'}">${r.ok?'✓ Correct':'✗ Wrong'}</td>
+  <td>${r.m?esc(r.m):'<em>No meaning added</em>'}</td></tr>`).join('');
+ $('missed').hidden=results.every(r=>r.ok);
+ $('end').scrollIntoView({behavior:'smooth',block:'start'});
+}
+$('rows').addEventListener('click',e=>{const b=e.target.closest('.say');if(b)speak(results[b.dataset.k].w)});
+$('start').addEventListener('click',()=>begin(level==='custom'?parseCustom():LISTS[level].words));
+$('again').addEventListener('click',()=>begin(lastList));
+$('missed').addEventListener('click',()=>begin(results.filter(r=>!r.ok).map(r=>[r.w,r.m])));
+$('change').addEventListener('click',()=>{$('end').hidden=true;$('setup').hidden=false});
+if(!window.AndroidTTS&&'speechSynthesis' in window)speechSynthesis.getVoices();
+}
+</script>
+</body>
+</html>
