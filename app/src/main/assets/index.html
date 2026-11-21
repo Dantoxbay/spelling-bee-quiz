@@ -36,7 +36,7 @@ h1,h2,h3{font-family:"Baloo 2",Nunito,sans-serif;margin:0;line-height:1.1}
 .hero h1{font-size:30px;font-weight:800}
 .hero p{margin:4px 0 0;font-weight:700;opacity:.8}
 .hero svg.comb{position:absolute;right:-18px;top:-10px;width:150px;opacity:.28}
-.brand{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:14px;position:relative;z-index:1}
 .brand .logo{width:38px;height:38px;border-radius:12px;background:#2A1A00;display:grid;place-items:center}
 .brand span{font:800 15px Nunito,system-ui,Roboto,sans-serif;letter-spacing:.01em}
 .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:18px}
@@ -92,6 +92,26 @@ h1,h2,h3{font-family:"Baloo 2",Nunito,sans-serif;margin:0;line-height:1.1}
 .emptybox{text-align:center;padding:40px 20px;color:var(--ink2);font-weight:700}
 .notice{margin-top:14px;background:#FFF0EF;color:#8C3B3B;border-radius:14px;padding:10px 14px;font:800 14px Nunito,system-ui,Roboto,sans-serif;text-align:center}
 .linkbtn{border:0;background:none;color:var(--ink3);font:800 14px Nunito,system-ui,Roboto,sans-serif;padding:10px;min-height:44px;text-decoration:underline}
+/* ---------- Voice settings ---------- */
+.gear{margin-left:auto;width:40px;height:40px;border-radius:12px;border:0;background:rgba(42,26,0,.12);display:grid;place-items:center;color:#2A1A00}
+.vcard{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:16px;margin-top:14px}
+.vcard h3{font-size:18px;margin-bottom:10px}
+.accents{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.accents button{border:2px solid var(--line);background:#FFFDF8;border-radius:14px;min-height:52px;font:800 15px Nunito,system-ui,Roboto,sans-serif;color:var(--ink2);display:flex;align-items:center;justify-content:center;gap:8px}
+.accents button[aria-pressed=true]{border-color:var(--honey);background:var(--honey-l);color:#2A1A00}
+.vlist{display:grid;gap:8px}
+.vrow{display:flex;align-items:center;gap:12px;border:2px solid var(--line);background:#FFFDF8;border-radius:14px;padding:10px 12px;min-height:54px;text-align:left;width:100%}
+.vrow[aria-pressed=true]{border-color:var(--honey);background:var(--honey-l)}
+.vrow .radio{width:22px;height:22px;border-radius:50%;border:2.5px solid #CDBEA6;flex:none;display:grid;place-items:center}
+.vrow[aria-pressed=true] .radio{border-color:var(--honey-d)}
+.vrow[aria-pressed=true] .radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--honey-d)}
+.vrow b{font:800 15.5px Nunito,system-ui,Roboto,sans-serif;display:block}
+.vrow small{font:700 12px Nunito,system-ui,Roboto,sans-serif;color:var(--ink3)}
+.vrow .play1{margin-left:auto;color:var(--honey-d)}
+.speed{display:flex;align-items:center;gap:12px}
+.speed input{flex:1;accent-color:var(--honey-d);height:32px}
+.speed output{font:900 16px Nunito,system-ui,Roboto,sans-serif;min-width:52px;text-align:right}
+.note{font:700 13.5px/1.45 Nunito,system-ui,Roboto,sans-serif;color:var(--ink2);margin:10px 0 0}
 /* ---------- Crossword ---------- */
 .cwcard{background:linear-gradient(150deg,#EAF1FF,#DCE7FF);border:2px solid #CCDBFF;border-radius:var(--r);padding:16px;box-shadow:var(--sh)}
 .cwcard .row1{display:flex;gap:14px;align-items:center}
@@ -213,7 +233,7 @@ h1,h2,h3{font-family:"Baloo 2",Nunito,sans-serif;margin:0;line-height:1.1}
 <section class="screen" id="home">
   <div class="hero">
     <svg class="comb" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="4"><path d="M30 8 46 17v18L30 44 14 35V17z"/><path d="M62 8 78 17v18L62 44 46 35V17z"/><path d="M46 35 62 44v18L46 71 30 62V44z"/><path d="M78 35 94 44v18L78 71 62 62V44z"/><path d="M62 62 78 71v18L62 98 46 89V71z"/></g></svg>
-    <div class="brand"><div class="logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="#F5A623"/><path d="M17 8.5a5 5 0 0 1 0 7"/></svg></div><span>Spelling Bee Quiz</span></div>
+    <div class="brand"><div class="logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="#F5A623"/><path d="M17 8.5a5 5 0 0 1 0 7"/></svg></div><span>Spelling Bee Quiz</span><button class="gear" id="openVoice" aria-label="Voice settings"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></button></div>
     <h1 id="greet">Ready to spell?</h1>
     <p>Listen, type, and learn each word's meaning.</p>
     <div class="stats">
@@ -286,6 +306,26 @@ h1,h2,h3{font-family:"Baloo 2",Nunito,sans-serif;margin:0;line-height:1.1}
   <p id="sheetText"></p>
   <button class="btn" id="next">Continue</button>
 </div></div>
+
+<!-- ================= VOICE SETTINGS ================= -->
+<section class="screen" id="voice" hidden>
+  <div class="topbar"><button class="icon" id="voiceBack" aria-label="Back to home"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><h2 style="font-size:24px;flex:1">Voice settings</h2></div>
+  <div class="vcard"><h3>Accent</h3>
+    <div class="accents" id="accents">
+      <button data-cc="US">American</button><button data-cc="GB">British</button>
+      <button data-cc="AU">Australian</button><button data-cc="IN">Indian</button>
+    </div></div>
+  <div class="vcard"><h3>Voice</h3>
+    <div class="vlist" id="vlist"></div>
+    <p class="note" id="engineNote"></p>
+  </div>
+  <div class="vcard"><h3>Speaking speed</h3>
+    <div class="speed"><span class="muted" style="font-weight:800;font-size:13px">Slow</span><input type="range" id="rate" min="0.5" max="1.2" step="0.05" aria-label="Speaking speed"><span class="muted" style="font-weight:800;font-size:13px">Fast</span><output id="rateOut"></output></div>
+  </div>
+  <div class="actions"><button class="btn" id="testVoice">Test: “necessary · beautiful · rhythm”</button>
+    <button class="btn ghost" id="sysTts" hidden>Open phone speech settings</button></div>
+  <p class="note" id="sysNote" hidden>Still unclear? In phone speech settings, choose <b>Speech Services by Google</b> as the preferred engine and download the English (United States) voice data. Then come back here and pick a voice.</p>
+</section>
 
 <!-- ================= CROSSWORD ================= -->
 <section class="screen" id="cross" hidden>
@@ -462,16 +502,19 @@ function drawWords(lv){
 }
 
 /* ---------- Speech ---------- */
+const VP=()=>Object.assign({cc:'US',name:'',rate:0.85},store.get('voice',{}));
+function webVoices(cc){if(!hasWebSpeech)return[];return speechSynthesis.getVoices().filter(v=>new RegExp('^en[-_]'+cc+'$','i').test(v.lang)).sort((a,b)=>(b.localService-a.localService)||(/google|natural|enhanced|premium/i.test(b.name)-/google|natural|enhanced|premium/i.test(a.name)))}
 function speak(word,rate){
  const p=$('hear');p.classList.add('talking');setTimeout(()=>p.classList.remove('talking'),1300);
- if(window.AndroidTTS){try{AndroidTTS.speak(word,rate||0.85);return}catch(e){}}
- if(hasWebSpeech){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(word);u.lang='en-US';u.rate=rate||0.85;
-  const v=speechSynthesis.getVoices().find(v=>/^en(-|_)(US|GB|PH)/i.test(v.lang));if(v)u.voice=v;speechSynthesis.speak(u);return}catch(e){}}
+ const vp=VP();const r=rate==='slow'?Math.max(0.35,vp.rate*0.6):(rate||vp.rate);
+ if(window.AndroidTTS){try{AndroidTTS.speak(word,r);return}catch(e){}}
+ if(hasWebSpeech){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(word);u.lang='en-'+vp.cc;u.rate=r;
+  const vs=webVoices(vp.cc);const v=vs.find(x=>x.name===vp.name)||vs[0];if(v)u.voice=v;speechSynthesis.speak(u);return}catch(e){}}
  $('flash').textContent=word;setTimeout(()=>{$('flash').textContent=''},1500);
 }
 
 /* ---------- Game ---------- */
-function show(id){for(const s of ['home','game','end','list','cross'])$(s).hidden=s!==id;window.scrollTo(0,0)}
+function show(id){for(const s of ['home','game','end','list','cross','voice'])$(s).hidden=s!==id;window.scrollTo(0,0)}
 function begin(list){
  lastMode='spell';
  lastList=list.slice();queue=list.slice();i=0;score=0;results=[];
@@ -497,7 +540,7 @@ function maskWord(m,w){const re=new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&
 $('meanBtn').addEventListener('click',()=>{if(answered)return;const [w,m]=queue[i];const box=$('hintbox');
  box.innerHTML='<b>MEANING</b>'+(m?esc(maskWord(m,w)):'No meaning was added for this word.');box.hidden=false;
  hintUsed=true;$('meanBtn').classList.add('used');});
-$('slow').addEventListener('click',()=>speak(queue[i][0],0.5));
+$('slow').addEventListener('click',()=>speak(queue[i][0],'slow'));
 $('form').addEventListener('submit',e=>{e.preventDefault();if(!answered&&$('ans').value.trim())judge($('ans').value)});
 $('check').addEventListener('click',()=>{if(!answered&&$('ans').value.trim())judge($('ans').value)});
 $('skip').addEventListener('click',()=>{if(!answered)judge('')});
@@ -695,6 +738,41 @@ function cwFinish(gaveUp){
  score=results.filter(r=>r.ok).length;
  if(gaveUp){words.forEach(wd=>wd.cells.forEach(([r,c])=>{cw.fill[r+','+c]=cw.p.sol[r+','+c]}));renderCw();setTimeout(finish,900)}else finish();
 }
+
+/* ================= VOICE SETTINGS ================= */
+const isApp=!!window.AndroidTTS;
+const ACC={US:'American',GB:'British',AU:'Australian',IN:'Indian'};
+function saveVoice(v){store.set('voice',v);if(isApp&&AndroidTTS.setVoice)try{AndroidTTS.setVoice(v.cc,v.name)}catch(e){}}
+function listVoices(cc){
+ if(isApp){try{return JSON.parse(AndroidTTS.voices(cc)||'[]').map(n=>({id:n,label:n}))}catch(e){return[]}}
+ return webVoices(cc).map(v=>({id:v.name,label:v.name}));
+}
+let voiceTries=0;
+function renderVoice(){
+ const v=VP();
+ for(const b of $('accents').children)b.setAttribute('aria-pressed',b.dataset.cc===v.cc);
+ const list=listVoices(v.cc);
+ if(!list.length&&voiceTries<10){voiceTries++;$('vlist').innerHTML='<div class="note">Loading voices…</div>';setTimeout(renderVoice,400);return}
+ voiceTries=0;
+ const cur=list.some(x=>x.id===v.name)?v.name:(list[0]?list[0].id:'');
+ $('vlist').innerHTML=list.length?list.map((x,k)=>`<button class="vrow" data-id="${esc(x.id)}" aria-pressed="${x.id===cur}"><span class="radio"></span><span><b>Voice ${k+1}${k===0?' · recommended':''}</b><small>${esc(isApp?x.label.replace(/^en-[a-z]{2}-x-/i,'').replace(/-local$/,''):x.label)}</small></span><span class="play1"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></button>`).join('')
+  :`<div class="note">No ${ACC[v.cc]} voice is installed on this phone. Pick another accent, or install the voice in phone speech settings.</div>`;
+ const eng=isApp&&AndroidTTS.engine?AndroidTTS.engine():'';
+ $('engineNote').textContent=isApp?(eng==='Google'?'Using Google speech engine (clearest). Tap a voice to hear it.':'Using your phone’s default speech engine. For a clearer voice, install “Speech Services by Google”.'):'Tap a voice to hear it.';
+ $('rate').value=v.rate;$('rateOut').textContent=Number(v.rate).toFixed(2)+'×';
+ $('sysTts').hidden=!isApp||!AndroidTTS.openSettings;$('sysNote').hidden=!isApp;
+}
+$('openVoice').addEventListener('click',()=>{show('voice');renderVoice()});
+$('voiceBack').addEventListener('click',()=>{show('home');renderHome()});
+$('accents').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const v=VP();v.cc=b.dataset.cc;v.name='';saveVoice(v);renderVoice();setTimeout(()=>speak('beautiful'),250)});
+$('vlist').addEventListener('click',e=>{const b=e.target.closest('.vrow');if(!b)return;const v=VP();v.name=b.dataset.id;saveVoice(v);for(const x of $('vlist').children)x.setAttribute('aria-pressed',x===b);setTimeout(()=>speak('beautiful'),150)});
+$('rate').addEventListener('input',()=>{const v=VP();v.rate=+$('rate').value;$('rateOut').textContent=v.rate.toFixed(2)+'×';store.set('voice',v)});
+$('rate').addEventListener('change',()=>speak('necessary'));
+$('testVoice').addEventListener('click',()=>speak('necessary. beautiful. rhythm.'));
+$('sysTts').addEventListener('click',()=>{try{AndroidTTS.openSettings()}catch(e){}});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!$('voice').hidden)renderVoice()});
+// apply saved voice at start-up (engine may still be loading)
+{const v=VP();if(isApp&&AndroidTTS.setVoice){let n=0;const t=setInterval(()=>{n++;try{if(AndroidTTS.ready()||n>20){AndroidTTS.setVoice(v.cc,v.name);clearInterval(t)}}catch(e){clearInterval(t)}},300)}}
 
 if(!window.AndroidTTS&&hasWebSpeech)speechSynthesis.getVoices();
 renderHome();
