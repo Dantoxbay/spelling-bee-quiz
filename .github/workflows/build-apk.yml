@@ -2,7 +2,12 @@ name: Build APK
 
 on:
   push:
+    paths-ignore:
+      - 'tools/**'
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Record built-in voice"]
+    types: [completed]
 
 permissions:
   contents: write

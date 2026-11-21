@@ -70,6 +70,7 @@ public class MainActivity extends Activity {
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
         s.setAllowFileAccess(true);
+        s.setMediaPlaybackRequiresUserGesture(false); // play built-in word recordings automatically
         webView.setWebViewClient(new WebViewClient());
         webView.addJavascriptInterface(new SpeechBridge(), "AndroidTTS");
         setContentView(webView);
