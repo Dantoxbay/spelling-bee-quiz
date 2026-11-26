@@ -4,13 +4,13 @@ plugins {
 
 android {
     namespace 'com.dticebu.spellingquiz'
-    compileSdk 34
+    compileSdk 36
 
     defaultConfig {
-        applicationId "com.dticebu.spellingquiz"
+        applicationId "com.dantoxbay.spellingbeequiz"
         minSdk 26
-        targetSdk 34
-        versionCode 9
+        targetSdk 36
+        versionCode 10
         versionName "3.0"
     }
 
@@ -22,6 +22,14 @@ android {
             keyAlias 'spellingbee'
             keyPassword 'spellingbee'
         }
+        release {
+            // Upload key for Google Play. The file and passwords come from
+            // GitHub Secrets, so they are never saved in this repository.
+            storeFile file('upload-key.jks')
+            storePassword System.getenv('UPLOAD_STORE_PASSWORD')
+            keyAlias 'upload'
+            keyPassword System.getenv('UPLOAD_KEY_PASSWORD')
+        }
     }
 
     buildTypes {
@@ -30,6 +38,7 @@ android {
         }
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
         }
     }
 
